@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    name = request.args.get("name", "Cast\'ur|=\'name")
+    name = request.args.get("name", "Cast\'ur\'Vote")
     return f'Bienvenue chez {escape(name)} !'
 
 @app.route('/signup', methods=['POST'])
