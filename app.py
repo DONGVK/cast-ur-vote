@@ -20,16 +20,3 @@ def turnover():
             return f'Please change the method or the parameters'
     else:
         return f'Please change the method or the parameters'
-    
- @app.route('/inscription', methods=['POST'])
-def signIn():
-     if request.method == 'POST':
-        type = request.args.get('type')
-        if type == "user":
-            return f'User route ...'
-        elif type == "candidate":
-            return f'Candidate route ...'
-        else :
-            return f'Please change the method or the parameters'
-    else:
-        return f'Please change the method or the parameters'
