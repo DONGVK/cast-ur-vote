@@ -1,4 +1,5 @@
 from flask import Flask, escape, request
+from Blockchain import *
 
 app = Flask(__name__)
 
@@ -10,6 +11,19 @@ def hello():
 @app.route('/signup', methods=['POST'])
 def turnover():
     if request.method == 'POST':
+        type = request.args.get('type')
+        if type == "user":
+            return f'User route ...'
+        elif type == "candidate":
+            return f'Candidate route ...'
+        else :
+            return f'Please change the method or the parameters'
+    else:
+        return f'Please change the method or the parameters'
+    
+ @app.route('/inscription', methods=['POST'])
+def signIn():
+     if request.method == 'POST':
         type = request.args.get('type')
         if type == "user":
             return f'User route ...'
