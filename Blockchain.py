@@ -33,11 +33,10 @@ class Blockchain(object):
 
 # Add a transaction with relevant info to the 'blockpool' - list of pending tx's. 
 
-    def new_transaction(self, sender, recipient, amount):
+    def new_transaction(self, sender, candidate):
         transaction = {
             'sender': sender,
-            'recipient': recipient,
-            'amount': amount
+            'candidate': candidate,
         }
         self.pending_transactions.append(transaction)
         return self.last_block['index'] + 1
@@ -54,6 +53,7 @@ class Blockchain(object):
         return hex_hash
 
 
+"""   
 blockchain = Blockchain()
 t1 = blockchain.new_transaction("Satoshi", "Mike", '5 BTC')
 t2 = blockchain.new_transaction("Mike", "Satoshi", '1 BTC')
@@ -65,4 +65,6 @@ t5 = blockchain.new_transaction("Alice", "Bob", '0.5 BTC')
 t6 = blockchain.new_transaction("Bob", "Mike", '0.5 BTC')
 blockchain.new_block(6789)
 
+
 print("Genesis block: ", blockchain.chain)
+"""
