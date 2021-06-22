@@ -14,5 +14,7 @@ http://zkkto.pythonanywhere.com/ ( secondaire )
 ``` pip
 pip install mysql-connector-python #Pour se connecter à une BBD MySQL
 pip install hashlib #Pour la blockchain
+pip install mysql-connector-python
+pip install bcrypt
 ```
 

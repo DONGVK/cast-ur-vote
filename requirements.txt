@@ -6,3 +6,5 @@ xlrd
 gunicorn
 json
 hashlib
+bcrypt
+mysql-connector-python
