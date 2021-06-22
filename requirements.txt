@@ -4,6 +4,5 @@ pandas
 matplotlib
 xlrd
 gunicorn
-hashlib
 bcrypt
 mysql-connector-python
