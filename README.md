@@ -27,7 +27,7 @@ python -m venv venv #crée l'espace virtuel de développement
 venv\Scripts\activate #run l'espace virtuel de développement
 ```
 
-Pour run le serveur de l'API
+Pour run le serveur de l'API :
 ```
 Flask run
 #Adresse de l'API localhost : http://127.0.0.1:5000/
