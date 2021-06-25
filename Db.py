@@ -1,7 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
 import bcrypt
-import json
 
 class DB :
 
@@ -56,9 +55,18 @@ class DB :
         info = (email,)
         self.__cursor.execute(query, info)
         myresult = self.__cursor.fetchall()
-        for x in myresult:
-            print("Hi",x)
+        """
+        0 : iduser
+        1 : lastname
+        2 : firstname
+        3 : birthdate
+        4 : email
+        5 : password
+        6 : vote
+        7 : idcandidate
+        """
         self.disconnect()
+        return myresult
     
     def userExist(self, email):
         self.connection()
@@ -79,6 +87,7 @@ class DB :
         self.__cursor.execute(query, info)
         myresult = self.__cursor.fetchall()
         self.disconnect()
+        print(myresult)
         if len(myresult) == 1:
             return myresult[0][0]
         else :
@@ -86,15 +95,22 @@ class DB :
     
     def testConnection(self, email, pwd):
         password = self.selectUserPassword(email)
+        if password == None or password == "" or pwd == None or pwd == "" :
+            value = {
+                "message" : "User is not connected",
+                "connected" : False
+            }
+            return value, 400
+
         if bcrypt.checkpw(pwd.encode() , password.encode()):
             value = {
                 "message" : "User is connected",
                 "connected" : True
             }
-            return json.dumps(value)
+            return value, 200
         else:
             value = {
                 "message" : "User is not connected",
                 "connected" : False
             }
-            return json.dumps(value)
+            return value, 401

@@ -1,12 +1,16 @@
-from flask import Flask, escape, request, jsonify
+from flask import Flask, escape, request, session, jsonify
 from flask_cors import CORS, cross_origin
 from Db import *
 import json
 
 app = Flask(__name__)
-DbSF = DB(None, None)
-cors = CORS(app)
+app.secret_key = "abc"
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
+CORS(app)
+DbSF = DB(None, None)
+
+
 
 @app.route('/')
 def hello():
@@ -14,7 +18,7 @@ def hello():
     return f'Bienvenue chez {escape(name)} !'
 
 @app.route('/signup', methods=['POST'])
-@cross_origin()
+@cross_origin(supports_credentials=True)
 def signUp():
     if request.method == 'POST':
         type = request.args.get('type')
@@ -27,8 +31,6 @@ def signUp():
             email = data['email']
             password = data['password']
             vote = data['vote']
-            print(email)
-            print("Vote = ",vote)
 
             #For the vote permission
             if(vote.lower() == "true"):
@@ -57,7 +59,8 @@ def signUp():
     else:
         return f'Please change the method or the parameters'
 
-@app.route('/signin', methods=['POST'])
+@app.route('/login', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def signIn():
     if request.method == 'POST':
         type = request.args.get('type')
@@ -65,7 +68,17 @@ def signIn():
             data = json.loads(request.data)
             email = data['email']
             pwd = data['password']
-            return DbSF.testConnection(email, pwd)
+            response, status = DbSF.testConnection(email, pwd)
+            if status == 200 :
+                resUser = DbSF.selectUser(email)
+                userV = {
+                    "idUser": resUser[0][0],
+                    "email" : resUser[0][4],
+                    "idCandidate" : resUser[0][7],
+                }
+                response.update(userV)
+            print("La réponse est : ",response)
+            return json.dumps(response), status
         elif type == "candidate":
             return f'Candidate route ...'
         else :
