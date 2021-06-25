@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 app.secret_key = "abc"
 app.config['CORS_HEADERS'] = 'Content-Type'
-app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
+app.config.update(SESSION_COOKIE_SECURE=True)
 CORS(app)
 DbSF = DB(None, None)
 
