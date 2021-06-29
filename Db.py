@@ -10,10 +10,16 @@ class DB :
 
     def connection(self):
         try:
+            self.__connection = mysql.connector.connect(host='sql11.freemysqlhosting.net',
+                                         database='sql11422138',
+                                         user='sql11422138',
+                                         password='VR9XRhUtuu')
+            """
             self.__connection = mysql.connector.connect(host='freedb.tech',
                                          database='freedbtech_sf',
                                          user='freedbtech_jn',
                                          password='123')
+            """
             """
             self.__connection = mysql.connector.connect(host='localhost',
                                          database='sf',
