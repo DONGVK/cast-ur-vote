@@ -56,7 +56,7 @@ return False
  
 def get_candidate_by_id(email):
 try:
-result = session.query(User).filter_by(email=email).first()
+result = session.query(Candidate).filter_by(email=email).first()
 return result
 except Exception as e:
 print(e)
@@ -64,7 +64,7 @@ return False
  
 def get_all_candidate():
 try:
-result = session.query(User).filter_by()
+result = session.query(Candidate).filter_by()
  
 return result
 except Exception as e:
@@ -78,21 +78,6 @@ if candidate_to_delete :
 session.delete(candidate_to_delete)
 session.commit()
 return True
-else:
-return False
-except Exception as e:
-print(e)
-return False
- 
-def update_attribute(email, attributes):
- 
-try:
-candidate_to_update = get_candidate_by_id(email)
-if candidate_to_update :
-for k,v in attributes.items():
-setattr(candidate_to_update, k, v)
-session.commit()
-return candidate_to_update
 else:
 return False
 except Exception as e:
