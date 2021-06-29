@@ -32,12 +32,6 @@ def signUp():
             password = data['password']
             vote = data['vote']
 
-            #For the vote permission
-            if(vote.lower() == "true"):
-                vote = True
-            else:
-                vote = False
-
             if(DbSF.userExist(email)):
                 value = {
                     "message" : "Email already exist",

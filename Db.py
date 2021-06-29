@@ -43,7 +43,7 @@ class DB :
         salt = bcrypt.gensalt()
         hashed = bcrypt.hashpw(password.encode(), salt)
         self.connection()
-        query = "INSERT INTO Utilisateur(firstName, lastName, birth_date, email, password, vote) VALUES(%s, %s, %s, %s, %s, %s);"
+        query = "INSERT INTO Utilisateur(first_name, last_name, birth_date, email, password, vote) VALUES(%s, %s, %s, %s, %s, %s);"
         tuple = (firstName, lastName, birthDate, email, hashed, vote)
         self.__cursor.execute(query, tuple)
         self.__connection.commit()
