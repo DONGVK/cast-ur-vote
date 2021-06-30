@@ -23,18 +23,18 @@ class DB :
                                          user='sql11422138',
                                          password='VR9XRhUtuu')
             """
-            """
+            
             self.__connection = mysql.connector.connect(host='freedb.tech',
                                          database='freedbtech_sf',
                                          user='freedbtech_jn',
                                          password='123')
-            """
             
+            """
             self.__connection = mysql.connector.connect(host='localhost',
                                          database='sf',
                                          user='root',
                                          password='123')
-            
+            """
             if self.__connection.is_connected():
                 db_Info = self.__connection.get_server_info()
                 print("Connected to MySQL Server version ", db_Info)
