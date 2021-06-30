@@ -1,3 +1,9 @@
+"""
+*   Db.py
+*   @Author : DONG
+"""
+__author__      = "DONG"
+
 import mysql.connector
 from mysql.connector import Error
 import bcrypt
@@ -8,6 +14,7 @@ class DB :
         self.__connection = con
         self.__cursor = cur
 
+    #Connect to the DB
     def connection(self):
         try:
             """
@@ -39,6 +46,8 @@ class DB :
         except Error as e:
             print("Error while connecting to MySQL", e)
 
+
+    #Disconnect from DB
     def disconnect(self):
         if self.__connection.is_connected():
             self.__cursor.close()
@@ -46,6 +55,10 @@ class DB :
             print("MySQL connection is closed")
         else:
             print("Not connected")
+    
+    #----------------------------------------------
+    # Utilisateur
+    #----------------------------------------------
     
     def insertUser(self, firstName, lastName, birthDate, email, password, vote):
         salt = bcrypt.gensalt()

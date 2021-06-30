@@ -1,3 +1,9 @@
+"""
+*   app.py
+*   @Author : DONG
+"""
+__author__      = "DONG"
+
 from flask import Flask, escape, request, session, jsonify
 from flask_cors import CORS, cross_origin
 from Db import *
