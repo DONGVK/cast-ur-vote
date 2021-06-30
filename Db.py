@@ -10,22 +10,24 @@ class DB :
 
     def connection(self):
         try:
+            """
             self.__connection = mysql.connector.connect(host='sql11.freemysqlhosting.net',
                                          database='sql11422138',
                                          user='sql11422138',
                                          password='VR9XRhUtuu')
+            """
             """
             self.__connection = mysql.connector.connect(host='freedb.tech',
                                          database='freedbtech_sf',
                                          user='freedbtech_jn',
                                          password='123')
             """
-            """
+            
             self.__connection = mysql.connector.connect(host='localhost',
                                          database='sf',
                                          user='root',
                                          password='123')
-            """
+            
             if self.__connection.is_connected():
                 db_Info = self.__connection.get_server_info()
                 print("Connected to MySQL Server version ", db_Info)
@@ -120,3 +122,94 @@ class DB :
                 "connected" : False
             }
             return value, 401
+    
+    #----------------------------------------------
+    # ACandidat
+    #----------------------------------------------
+
+    def selectAllACandidat(self):
+        self.connection()
+        query = "SELECT * FROM ACandidat;"
+        self.__cursor.execute(query)
+        myresult = self.__cursor.fetchall()
+        """
+        0 : idACandidat
+        1 : lastname
+        2 : firstname
+        3 : birthdate
+        4 : email
+        5 : password
+        6 : vote
+        """
+        self.disconnect()
+        return myresult
+    
+    def selectACandidat(self, email):
+        self.connection()
+        query = "SELECT * FROM ACandidat WHERE email = %s;"
+        tuple = (email,)
+        self.__cursor.execute(query, tuple)
+        myresult = self.__cursor.fetchall()
+        """
+        0 : idACandidat
+        1 : lastname
+        2 : firstname
+        3 : birthdate
+        4 : email
+        5 : password
+        6 : vote
+        """
+        self.disconnect()
+        print(myresult)
+
+    def insertACandidat(self, firstName, lastName, birthDate, email, password, vote):
+        try :
+            salt = bcrypt.gensalt()
+            hashed = bcrypt.hashpw(password.encode(), salt)
+            self.connection()
+            query = "INSERT INTO ACandidat(first_name, last_name, birth_date, email, password, vote) VALUES(%s, %s, %s, %s, %s, %s);"
+            tuple = (firstName, lastName, birthDate, email, hashed, vote)
+            self.__cursor.execute(query, tuple)
+            self.__connection.commit()
+            self.disconnect()
+            return True
+        except Error:
+            return False
+    
+    def deleteACandidat(self, email):
+        try :
+            self.connection()
+            query = "DELETE FROM ACandidat WHERE email = %s;"
+            tuple = (email,)
+            self.__cursor.execute(query, tuple)
+            self.__connection.commit()
+            self.disconnect()
+            return True
+        except Error:
+            return False
+
+    #----------------------------------------------
+    # ACandidat
+    #----------------------------------------------
+    def selectAllCandidat(self):
+        self.connection()
+        query = "SELECT * FROM Candidat;"
+        self.__cursor.execute(query)
+        myresult = self.__cursor.fetchall()
+        """
+        0 : idACandidat
+        1 : lastname
+        2 : firstname
+        3 : birthdate
+        4 : email
+        5 : password
+        6 : vote
+        """
+        self.disconnect()
+        return myresult
+        
+
+
+a = DB(None, None)
+print(a.selectAllCandidat()[0][0])
+    
