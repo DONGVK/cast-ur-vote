@@ -60,15 +60,21 @@ class DB :
     # Utilisateur
     #----------------------------------------------
     
-    def insertUser(self, firstName, lastName, birthDate, email, password, vote):
-        salt = bcrypt.gensalt()
-        hashed = bcrypt.hashpw(password.encode(), salt)
-        self.connection()
-        query = "INSERT INTO Utilisateur(first_name, last_name, birth_date, email, password, vote) VALUES(%s, %s, %s, %s, %s, %s);"
-        tuple = (firstName, lastName, birthDate, email, hashed, vote)
-        self.__cursor.execute(query, tuple)
-        self.__connection.commit()
-        self.disconnect()
+    def insertUser(self, firstName, lastName, birthDate, email, password, vote, id_candidat):
+        try:
+            salt = bcrypt.gensalt()
+            hashed = bcrypt.hashpw(password.encode(), salt)
+            self.connection()
+            query = "INSERT INTO Utilisateur(first_name, last_name, birth_date, email, password, vote, id_candidat) VALUES(%s, %s, %s, %s, %s, %s, %s);"
+            tuple = (firstName, lastName, birthDate, email, hashed, vote, id_candidat)
+            self.__cursor.execute(query, tuple)
+            self.__connection.commit()
+            self.disconnect()
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
      
     def selectUser(self, email):
         self.connection()
@@ -173,7 +179,7 @@ class DB :
         6 : vote
         """
         self.disconnect()
-        print(myresult)
+        return myresult
 
     def insertACandidat(self, firstName, lastName, birthDate, email, password, vote):
         try :
@@ -202,7 +208,7 @@ class DB :
             return False
 
     #----------------------------------------------
-    # ACandidat
+    # Candidat
     #----------------------------------------------
     def selectAllCandidat(self):
         self.connection()
@@ -210,19 +216,91 @@ class DB :
         self.__cursor.execute(query)
         myresult = self.__cursor.fetchall()
         """
-        0 : idACandidat
-        1 : lastname
-        2 : firstname
-        3 : birthdate
-        4 : email
-        5 : password
-        6 : vote
+        0 : id_candidat
+        1 : prog
         """
         self.disconnect()
         return myresult
         
+    def selectCandidat(self, id):
+        try :
+            self.connection()
+            query = "SELECT * FROM Candidat WHERE id_candidat = %s;"
+            tuple = (id,)
+            self.__cursor.execute(query, tuple)
+            myresult = self.__cursor.fetchall()
+            """
+            0 : id_candidat
+            1 : vote
+            """
+            self.disconnect()
+            return myresult
+        except Exception as error :
+            print(error)
+            return False
+    
+    def updateCandidat(self, id, prog):
+        try :
+            self.connection()
+            query = "UPDATE Candidat set prog = %s WHERE id_candidat = %s"
+            tuple = (prog, id)
+            self.__cursor.execute(query, tuple)
+            self.__connection.commit()
+            self.disconnect()
+            return True
+        except Exception as error :
+            print(error)
+            return False
 
+    def insertCandidat(self):
+        try :
+            self.connection()
+            query = "INSERT INTO Candidat(prog) VALUES('');"
+            self.__cursor.execute(query)
+            self.__connection.commit()
+            self.disconnect()
+            return True
+        except Exception as error :
+            print(error)
+            return False
+    
+    def selectNewCandidat(self):
+        try :
+            self.connection()
+            query = "SELECT MAX(id_candidat) FROM Candidat;"
+            self.__cursor.execute(query)
+            myresult = self.__cursor.fetchall()
+            """
+            0 : id_candidat
+            1 : vote
+            """
+            self.disconnect()
+            return myresult[0][0]
+        except Exception as error :
+            print(error)
+            return False
 
-a = DB(None, None)
-print(a.selectAllCandidat()[0][0])
+    def confirmCandidat(self, email):
+        try:
+            self.connection()
+            ac = self.selectACandidat(email)
+            """ IN ac
+            0 : id_acandidat
+            1 : last_name
+            2 : first_name
+            3 : birth_date
+            4 : email
+            5 : password
+            6 : vote
+            """
+            if(len(ac) == 1):
+                if(self.insertCandidat()):
+                    id_candidat = self.selectNewCandidat()
+                    if(self.insertUser(ac[0][2], ac[0][1], ac[0][3], ac[0][4], ac[0][5], ac[0][6], id_candidat)):
+                        self.deleteACandidat(email)
+                        return True
+            return False
+        except Exception as e:
+            print(e)
+            return False
     

@@ -46,14 +46,33 @@ def signUp():
                 response.headers.add('Access-Control-Allow-Origin', '*')
                 return response, 401
             else:
-                DbSF.insertUser(firstName, lastName, birthDate, email, password, vote)
+                DbSF.insertUser(firstName, lastName, birthDate, email, password, vote, None)
                 value = {
                     "message" : "User created",
                 }
                 return json.dumps(value), 200
 
-        elif type == "candidate":
-            return f'Candidate route ...'
+        elif type == "candidat":
+            data = json.loads(request.data)
+            firstName = data['firstname']
+            lastName = data['lastname']
+            birthDate = data['date']
+            email = data['email']
+            password = data['password']
+            vote = data['vote']
+
+            if(DbSF.userExist(email)):
+                value = {
+                    "message" : "Email already exist",
+                }
+                response = jsonify(value)
+                return response, 401
+            else:
+                DbSF.insertACandidat(firstName, lastName, birthDate, email, password, vote)
+                value = {
+                    "message" : "ACandidat created",
+                }
+                return json.dumps(value), 200
         else :
             return f'Please change the method or the parameters'
     else:
