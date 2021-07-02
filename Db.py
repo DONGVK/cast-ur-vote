@@ -60,6 +60,7 @@ class DB :
     # Utilisateur
     #----------------------------------------------
     
+    # Add new user
     def insertUser(self, firstName, lastName, birthDate, email, password, vote, id_candidat):
         try:
             salt = bcrypt.gensalt()
@@ -75,7 +76,7 @@ class DB :
             print(e)
             return False
 
-     
+    # Get user's informations by is email
     def selectUser(self, email):
         self.connection()
         query = "SELECT * FROM Utilisateur WHERE email=%s;"
@@ -95,6 +96,27 @@ class DB :
         self.disconnect()
         return myresult
     
+    # Get user information by his id_candidat
+    def selectUserByIDC(self, id_candidat):
+        self.connection()
+        query = "SELECT * FROM Utilisateur WHERE id_candidat=%s;"
+        info = (id_candidat,)
+        self.__cursor.execute(query, info)
+        myresult = self.__cursor.fetchall()
+        """
+        0 : iduser
+        1 : lastname
+        2 : firstname
+        3 : birthdate
+        4 : email
+        5 : password
+        6 : vote
+        7 : idcandidate
+        """
+        self.disconnect()
+        return myresult
+    
+    # Check if an email is already taken or not
     def userExist(self, email):
         self.connection()
         query = "SELECT * FROM Utilisateur WHERE email=%s;"
@@ -107,6 +129,7 @@ class DB :
         else :
             return False
 
+    # Get the user's password by his email
     def selectUserPassword(self, email):
         self.connection()
         query = "SELECT password FROM Utilisateur WHERE email=%s;"
@@ -120,6 +143,7 @@ class DB :
         else :
             return None
     
+    # Check if the password provided by the user is the same during registration
     def testConnection(self, email, pwd):
         password = self.selectUserPassword(email)
         if password == None or password == "" or pwd == None or pwd == "" :
@@ -146,6 +170,7 @@ class DB :
     # ACandidat
     #----------------------------------------------
 
+    # Get all potentials candidates from the DB
     def selectAllACandidat(self):
         self.connection()
         query = "SELECT * FROM ACandidat;"
@@ -163,6 +188,7 @@ class DB :
         self.disconnect()
         return myresult
     
+    # Get the potentials candidates by his email
     def selectACandidat(self, email):
         self.connection()
         query = "SELECT * FROM ACandidat WHERE email = %s;"
@@ -181,6 +207,7 @@ class DB :
         self.disconnect()
         return myresult
 
+    # add a new potential canditate when the admin validate this candidate
     def insertACandidat(self, firstName, lastName, birthDate, email, password, vote):
         try :
             salt = bcrypt.gensalt()
@@ -195,6 +222,7 @@ class DB :
         except Error:
             return False
     
+    # Delete a potential candidate if the admin doesn't validate this candidate
     def deleteACandidat(self, email):
         try :
             self.connection()
@@ -210,6 +238,8 @@ class DB :
     #----------------------------------------------
     # Candidat
     #----------------------------------------------
+
+    # Get all candidayes from the DB
     def selectAllCandidat(self):
         self.connection()
         query = "SELECT * FROM Candidat;"
@@ -222,6 +252,7 @@ class DB :
         self.disconnect()
         return myresult
         
+    # Get a candidate by his id_candiate
     def selectCandidat(self, id):
         try :
             self.connection()
@@ -239,6 +270,7 @@ class DB :
             print(error)
             return False
     
+    # Update a candidate's program
     def updateCandidat(self, id, prog):
         try :
             self.connection()
@@ -252,6 +284,7 @@ class DB :
             print(error)
             return False
 
+    # Add a new candidate
     def insertCandidat(self):
         try :
             self.connection()
@@ -263,7 +296,8 @@ class DB :
         except Exception as error :
             print(error)
             return False
-    
+
+    # Get the id_candidate from the newest candidate added
     def selectNewCandidat(self):
         try :
             self.connection()
@@ -280,6 +314,7 @@ class DB :
             print(error)
             return False
 
+    # While the admin confirm a potential candidate, this PA change into a confirmed candidate 
     def confirmCandidat(self, email):
         try:
             self.connection()
