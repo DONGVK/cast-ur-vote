@@ -118,6 +118,30 @@ def signIn():
     else:
         return f'Please change the method or the parameters'
 
+
+"""
+
+Get user
+
+"""  
+@app.route('/getuser', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def getUser():
+    if request.method == 'POST':
+        data = json.loads(request.data)
+        email = data["email"]
+        if DbSF.userExist(email) :
+            res = DbSF.selectUser(email)[0]
+            print(res)
+            res = list(res)
+            print(myconverter(res[3]))
+            res[3] = myconverter(res[3])
+            return json.dumps({"data" :  res}), 200
+        else :
+            return json.dumps({ "message" : "Email doesn't exist"}), 400
+
+
+
 """
 
 Get all candidates
@@ -141,5 +165,5 @@ def getCandidat():
         return f'Please change the method or the parameters'
 
 def myconverter(d):
-    if isinstance(d, datetime.datetime):
+    if isinstance(d, datetime.date):
         return d.__str__()
