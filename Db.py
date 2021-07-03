@@ -36,12 +36,10 @@ class DB :
                                          password='123')
             """
             if self.__connection.is_connected():
-                db_Info = self.__connection.get_server_info()
-                print("Connected to MySQL Server version ", db_Info)
+                db_Info = self.__connection.get_server_info() # Connection info
                 self.__cursor = self.__connection.cursor()
                 self.__cursor.execute("select database();")
-                record = self.__cursor.fetchone()
-                print("You're connected to database: ", record)
+                record = self.__cursor.fetchone() # Database
 
         except Error as e:
             print("Error while connecting to MySQL", e)
@@ -123,8 +121,7 @@ class DB :
         info = (email,)
         self.__cursor.execute(query, info)
         myresult = self.__cursor.fetchall()
-        if len(myresult) > 0:
-            print("User exist")
+        if len(myresult) > 0: # User exist
             return True
         else :
             return False
@@ -137,7 +134,6 @@ class DB :
         self.__cursor.execute(query, info)
         myresult = self.__cursor.fetchall()
         self.disconnect()
-        print(myresult)
         if len(myresult) == 1:
             return myresult[0][0]
         else :

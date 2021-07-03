@@ -109,7 +109,6 @@ def signIn():
                     "idCandidate" : resUser[0][7],
                 }
                 response.update(userV)
-            print("La réponse est : ",response)
             return json.dumps(response), status
         elif type == "candidate":
             return f'Candidate route ...'
@@ -132,9 +131,7 @@ def getUser():
         email = data["email"]
         if DbSF.userExist(email) :
             res = DbSF.selectUser(email)[0]
-            print(res)
             res = list(res)
-            print(myconverter(res[3]))
             res[3] = myconverter(res[3])
             return json.dumps({"data" :  res}), 200
         else :
@@ -157,7 +154,6 @@ def getCandidat():
             candidat = list(DbSF.selectUserByIDC(res[i][0])[0])
             candidat[3] = myconverter(candidat[3])
             candidates.append(tuple(candidat + [res[i][1]]))
-            print(candidates)
         if(len(res) > 0) :
             return json.dumps({ "data" : candidates}), 200
         return json.dumps({"message" : "Aucun candidat"}), 500
