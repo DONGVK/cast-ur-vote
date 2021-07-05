@@ -7,7 +7,7 @@ class Blockchain(object):
         self.chain = []
         self.pending_transactions = []
 
-        self.new_block(previous_hash="The Times 03/Jan/2009 Chancellor on brink of second bailout for banks.", proof=100)
+        self.new_block(previous_hash="Election présidentielle", proof=100)
 
 # Create a new block listing key/value pairs of block information in a JSON object. Reset the list of pending transactions & append the newest block to the chain.
 
@@ -53,18 +53,18 @@ class Blockchain(object):
         return hex_hash
 
 
-"""   
+  
 blockchain = Blockchain()
-t1 = blockchain.new_transaction("Satoshi", "Mike", '5 BTC')
-t2 = blockchain.new_transaction("Mike", "Satoshi", '1 BTC')
-t3 = blockchain.new_transaction("Satoshi", "Hal Finney", '5 BTC')
+t1 = blockchain.new_transaction("Satoshi", "Mike")
+t2 = blockchain.new_transaction("Mike", "Satoshi")
+t3 = blockchain.new_transaction("Satoshi", "Hal Finney")
 blockchain.new_block(12345)
 
-t4 = blockchain.new_transaction("Mike", "Alice", '1 BTC')
-t5 = blockchain.new_transaction("Alice", "Bob", '0.5 BTC')
-t6 = blockchain.new_transaction("Bob", "Mike", '0.5 BTC')
+t4 = blockchain.new_transaction("Mike", "Alice")
+t5 = blockchain.new_transaction("Alice", "Bob")
+t6 = blockchain.new_transaction("Bob", "Mike")
 blockchain.new_block(6789)
 
 
 print("Genesis block: ", blockchain.chain)
-"""
+

@@ -163,3 +163,63 @@ def getCandidat():
 def myconverter(d):
     if isinstance(d, datetime.date):
         return d.__str__()
+
+"""
+
+To vote
+
+"""  
+@app.route('/vote', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def vote():
+    if request.method == 'POST':
+        data = json.loads(request.data)
+        id_user = data['id_user']
+        id_candidat = data['id_candidat']
+
+        if DbSF.selectAVote(id_user) :
+            res = {
+                "message" : "User already voted"
+            }
+            return json.dumps(res), 400
+        else :
+            DbSF.insertAVote(id_user)
+            if DbSF.incrementResult(id_candidat) :
+                res = {
+                "message" : "Increment vote successfully"
+                }
+                return json.dumps(res), 200
+            else:
+                res = {
+                    "message" : "Error while trying to increment"
+                }
+                return json.dumps(res), 500
+    else:
+        return f'Please change the method or the parameters'
+
+"""
+
+AVote
+
+"""  
+@app.route('/avote', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def checkVote():
+    if request.method == 'POST':
+        data = json.loads(request.data)
+        id_user = data['id_user']
+
+        if DbSF.selectAVote(id_user) :
+            res = {
+                "vote" : True
+            }
+            return json.dumps(res), 200
+        else:
+            res = {
+                "vote" : False
+            }
+            return json.dumps(res), 401
+            
+    else:
+        return f'Please change the method or the parameters'
+

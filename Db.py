@@ -23,11 +23,12 @@ class DB :
                                          user='sql11422138',
                                          password='VR9XRhUtuu')
             """
-            
+            #"""
             self.__connection = mysql.connector.connect(host='freedb.tech',
                                          database='freedbtech_sf',
                                          user='freedbtech_jn',
                                          password='123')
+            #"""                           
             
             """
             self.__connection = mysql.connector.connect(host='localhost',
@@ -35,6 +36,7 @@ class DB :
                                          user='root',
                                          password='123')
             """
+            
             if self.__connection.is_connected():
                 db_Info = self.__connection.get_server_info() # Connection info
                 self.__cursor = self.__connection.cursor()
@@ -334,4 +336,121 @@ class DB :
         except Exception as e:
             print(e)
             return False
+
+    #----------------------------------------------
+    # Voter
+    #----------------------------------------------
+
+    """    
+    # AVote represent all users who already voted
+    """
+
+    # Check if an user already vote or not
+    def selectAVote(self, id_user):
+        self.connection()
+        query = "SELECT * FROM AVote WHERE id_user=%s;"
+        info = (id_user,)
+        self.__cursor.execute(query, info)
+        myresult = self.__cursor.fetchall()
+        """
+        0 : iduser
+        """
+        self.disconnect()
+        if (len(myresult) == 0):
+            return False
+        else:
+            return True
+
+    def insertAVote(self, id_user):
+        try:
+            self.connection()
+            query = "INSERT INTO AVote(id_user) VALUES (%s);"
+            tuple = (id_user,)
+            self.__cursor.execute(query, tuple)
+            self.__connection.commit()
+            self.disconnect()
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def deleteAVote(self, id_user):
+        try:
+            self.connection()
+            query = "DELETE FROM AVote WHERE id_user = %s;"
+            tuple = (id_user,)
+            self.__cursor.execute(query, tuple)
+            self.__connection.commit()
+            self.disconnect()
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def countAVote(self):
+        self.connection()
+        query = "SELECT COUNT(*) FROM AVote;"
+        self.__cursor.execute(query,)
+        myresult = self.__cursor.fetchall()
+        self.disconnect()
+        return myresult[0][0]
+
+    """    
+    # Resultat represent the result of the election
+    """
+
+    def initResult(self):
+        try:
+            number_candidat = self.selectAllCandidat()
+            if(len(number_candidat) > 0):
+                self.connection()
+                self.__cursor.execute("DELETE FROM Resultat;")
+                for i in range(len(number_candidat)):
+                    query = "INSERT INTO Resultat(id_candidat, nombre) VALUES (%s, %s);"
+                    tuple = ((i+1), 0,)
+                    self.__cursor.execute(query, tuple)
+                self.__connection.commit()
+                self.disconnect()
+            return True
+        except Exception as e:
+            print(e)
+            return False
     
+    def selectAllResult(self):
+        self.connection()
+        query = "SELECT * FROM Resultat;"
+        self.__cursor.execute(query)
+        myresult = self.__cursor.fetchall()
+        """
+        0 : id_candidat
+        1 : nombre
+        """
+        self.disconnect()
+        return myresult
+
+    def selectResult(self, id_candidat):
+        self.connection()
+        query = "SELECT * FROM Resultat WHERE id_candidat = %s;"
+        tuple = (id_candidat,)
+        self.__cursor.execute(query, tuple)
+        myresult = self.__cursor.fetchall()
+        """
+        0 : id_candidat
+        1 : nombre
+        """
+        self.disconnect()
+        return myresult
+
+    def incrementResult(self, id_candidat):
+        try:
+            nombre = self.selectResult(id_candidat)[0][1] + 1
+            self.connection()
+            query = "UPDATE Resultat SET nombre = %s WHERE id_candidat = %s"
+            tuple = (nombre, id_candidat)
+            self.__cursor.execute(query, tuple)
+            self.__connection.commit()
+            self.disconnect()
+            return True
+        except Exception as e:
+            print(e)
+            return False

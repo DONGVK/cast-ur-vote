@@ -63,6 +63,26 @@ CREATE TABLE Admin(
 	CONSTRAINT Admin_PK PRIMARY KEY (id_admin)
 )ENGINE=InnoDB;
 
+#------------------------------------------------------------
+# Table: AVote
+#------------------------------------------------------------
+
+CREATE TABLE AVote(
+        id_user          Int Auto_increment NOT NULL ,
+	CONSTRAINT AVote_PK PRIMARY KEY (id_user)
+)ENGINE=InnoDB;
+
+#------------------------------------------------------------
+# Table: Resultat
+#------------------------------------------------------------
+
+CREATE TABLE Resultat(
+        id_candidat          Int Auto_increment NOT NULL ,
+        nombre int,
+	CONSTRAINT Resultat_PK PRIMARY KEY (id_candidat)
+)ENGINE=InnoDB;
+
+
 /*
 ALTER TABLE Utilisateur
 	ADD CONSTRAINT Utilisateur_Candidat_FK
@@ -97,3 +117,13 @@ INSERT INTO Admin(last_name, first_name, birth_date, email, password) VALUES
 INSERT INTO ACandidat(last_name, first_name, birth_date, email, password, vote) VALUES
 	("SOSO", "Sophie", "2000-06-21", "sophie@mail.com", "$2b$12$TegbtNfT/zJ9yGTr8FRUL.9iuGUAGJLncTvXysHiFpfFmjr40vFIO", 123456789),
     ("MOMO", "Moha", "1977-12-21", "moha@mail.com", "$2b$12$TegbtNfT/zJ9yGTr8FRUL.9iuGUAGJLncTvXysHiFpfFmjr40vFIO", 654123789);
+    
+INSERT INTO Resultat(id_candidat, nombre) VALUES
+	(1, 0),
+	(2, 0),
+	(3, 0),
+	(4, 0),
+	(5, 0),
+	(6, 0);
+    
+INSERT INTO AVote(id_user) VALUES (1);
