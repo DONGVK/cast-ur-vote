@@ -61,6 +61,8 @@ class DB :
     #----------------------------------------------
     
     # Add new user
+    # @param [string] Contains user's information
+    # @return [boolean] If the user is sucessfully added return true otherwise false
     def insertUser(self, firstName, lastName, birthDate, email, password, vote, id_candidat):
         try:
             salt = bcrypt.gensalt()
@@ -77,6 +79,8 @@ class DB :
             return False
 
     # Get user's informations by is email
+    # @param [string] User's email
+    # @return [array] return an array with the user's informations
     def selectUser(self, email):
         self.connection()
         query = "SELECT * FROM Utilisateur WHERE email=%s;"
@@ -97,6 +101,8 @@ class DB :
         return myresult
     
     # Get user information by his id_candidat
+    # @param [string] User's id_candidat
+    # @return [array] return an array with the user's informations
     def selectUserByIDC(self, id_candidat):
         self.connection()
         query = "SELECT * FROM Utilisateur WHERE id_candidat=%s;"
@@ -117,6 +123,8 @@ class DB :
         return myresult
     
     # Check if an email is already taken or not
+    # @param [string] User's email
+    # @return [boolean] return true if the user exists otherwise false
     def userExist(self, email):
         self.connection()
         query = "SELECT * FROM Utilisateur WHERE email=%s;"
@@ -129,6 +137,8 @@ class DB :
             return False
 
     # Get the user's password by his email
+    # @param [string] User's email
+    # @return [string] return a string if we found the password linked by the email, return None if the password doesn't exist
     def selectUserPassword(self, email):
         self.connection()
         query = "SELECT password FROM Utilisateur WHERE email=%s;"
@@ -142,6 +152,8 @@ class DB :
             return None
     
     # Check if the password provided by the user is the same during registration
+    # @param [string] User's email & password
+    # @return [object, int] return an object depending on the combinaison provided by the user
     def testConnection(self, email, pwd):
         password = self.selectUserPassword(email)
         if password == None or password == "" or pwd == None or pwd == "" :
@@ -169,6 +181,7 @@ class DB :
     #----------------------------------------------
 
     # Get all potentials candidates from the DB
+    # @return [array] return an array with the potential candidates' informations from ACandidat table
     def selectAllACandidat(self):
         self.connection()
         query = "SELECT * FROM ACandidat;"
@@ -187,6 +200,8 @@ class DB :
         return myresult
     
     # Get the potentials candidates by his email
+    # @param [string] User's email
+    # @return [array] return an array with the user's informations
     def selectACandidat(self, email):
         self.connection()
         query = "SELECT * FROM ACandidat WHERE email = %s;"
@@ -206,6 +221,8 @@ class DB :
         return myresult
 
     # add a new potential canditate when the admin validate this candidate
+    # @param [string] User's information
+    # @return [boolean] return true if the potential candidate is added otherwise false.
     def insertACandidat(self, firstName, lastName, birthDate, email, password, vote):
         try :
             salt = bcrypt.gensalt()
@@ -221,6 +238,8 @@ class DB :
             return False
     
     # Delete a potential candidate if the admin doesn't validate this candidate
+    # @param [string] User's email
+    # @return [array] return true if the user id deleted otherwise false
     def deleteACandidat(self, email):
         try :
             self.connection()
@@ -238,6 +257,7 @@ class DB :
     #----------------------------------------------
 
     # Get all candidayes from the DB
+    # @return [array] return all the rows which contain all candidates 
     def selectAllCandidat(self):
         self.connection()
         query = "SELECT * FROM Candidat;"
@@ -250,7 +270,9 @@ class DB :
         self.disconnect()
         return myresult
         
-    # Get a candidate by his id_candiate
+    # Get a candidate by his id_candidat
+    # @param [string] Candidate's id_candidat
+    # @return [array] return an array with the candidat's informations
     def selectCandidat(self, id):
         try :
             self.connection()
@@ -269,6 +291,8 @@ class DB :
             return False
     
     # Update a candidate's program
+    # @param [int, string] Candidate id_candidat and program
+    # @return [boolean] return true if the candidat program is sucessfully updated otherwise false
     def updateCandidat(self, id, prog):
         try :
             self.connection()
@@ -283,6 +307,7 @@ class DB :
             return False
 
     # Add a new candidate
+    # @return [boolean] return true if the candidat is sucessfully created otherwise false
     def insertCandidat(self):
         try :
             self.connection()
@@ -296,6 +321,7 @@ class DB :
             return False
 
     # Get the id_candidate from the newest candidate added
+    # @return [int or boolean] return the id_candidat of the latest created candidate, if there an error return false
     def selectNewCandidat(self):
         try :
             self.connection()
@@ -312,7 +338,9 @@ class DB :
             print(error)
             return False
 
-    # While the admin confirm a potential candidate, this PA change into a confirmed candidate 
+    # While the admin confirm a potential candidate, this PA change into a confirmed candidate
+    # @param [string] Potential candidate's email
+    # @return [boolean] return true if the potential candidat turn into a candidat successfully otherwise false
     def confirmCandidat(self, email):
         try:
             self.connection()
@@ -346,6 +374,8 @@ class DB :
     """
 
     # Check if an user already vote or not
+    # @param [int] user's id
+    # @return [boolean] return true if the user already voted otherwise false
     def selectAVote(self, id_user):
         self.connection()
         query = "SELECT * FROM AVote WHERE id_user=%s;"
@@ -361,6 +391,9 @@ class DB :
         else:
             return True
 
+    # Add the user in the "user who voted"
+    # @param [string] User's id
+    # @return [boolean] return true if the user is sucessfully added otherwise false
     def insertAVote(self, id_user):
         try:
             self.connection()
@@ -374,6 +407,9 @@ class DB :
             print(e)
             return False
 
+    # Delete a vote
+    # @param [string] User's email
+    # @return [boolean] return true if the user's vote is successfully deleted otherwise false
     def deleteAVote(self, id_user):
         try:
             self.connection()
@@ -387,6 +423,8 @@ class DB :
             print(e)
             return False
 
+    # Check how many user voted
+    # @return [int] return the number of user who already voted
     def countAVote(self):
         self.connection()
         query = "SELECT COUNT(*) FROM AVote;"
@@ -399,6 +437,8 @@ class DB :
     # Resultat represent the result of the election
     """
 
+    # Insert row which determine each candidate's number of vote
+    # @return [boolean] return true if the rows are successfully added otherwise false
     def initResult(self):
         try:
             number_candidat = self.selectAllCandidat()
@@ -416,6 +456,8 @@ class DB :
             print(e)
             return False
     
+    # See the results
+    # @return [array] return an array with the results
     def selectAllResult(self):
         self.connection()
         query = "SELECT * FROM Resultat;"
@@ -428,6 +470,9 @@ class DB :
         self.disconnect()
         return myresult
 
+    # Select the candidat's result
+    # @param [int] candidate's id_candidat
+    # @return [array] return an array with the candidat's result informations
     def selectResult(self, id_candidat):
         self.connection()
         query = "SELECT * FROM Resultat WHERE id_candidat = %s;"
@@ -441,6 +486,9 @@ class DB :
         self.disconnect()
         return myresult
 
+    # If an user vote for a candidat, the candidat voice number will increase by 1
+    # @param [int] candidat's id
+    # @return [boolean] return true if the candidate's vote increment, otherwise false
     def incrementResult(self, id_candidat):
         try:
             nombre = self.selectResult(id_candidat)[0][1] + 1
