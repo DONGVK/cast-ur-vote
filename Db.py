@@ -405,6 +405,10 @@ class DB :
             if(len(number_candidat) > 0):
                 self.connection()
                 self.__cursor.execute("DELETE FROM Resultat;")
+                self.__cursor.execute("DELETE FROM Avote;")
+                query = "INSERT INTO Resultat(id_candidat, nombre) VALUES (%s, %s);"
+                tuple = (0, 0,)
+                self.__cursor.execute(query, tuple)
                 for i in range(len(number_candidat)):
                     query = "INSERT INTO Resultat(id_candidat, nombre) VALUES (%s, %s);"
                     tuple = ((i+1), 0,)
